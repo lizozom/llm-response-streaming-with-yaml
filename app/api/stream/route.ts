@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { parseLlmResponse } from "@/app/helpers/parseLlmResponse";
-import { streamGenerateContent } from "@/app/helpers/streamGenerateContent";
+import { generateLlmContentStream } from "@/app/helpers/generateLlmContentStream";
 import { Subscription } from 'rxjs';
 
 export async function GET(request: NextRequest) {
@@ -12,14 +11,13 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid number' }, { status: 400 });
     }
 
-    const geminiStream$ = await streamGenerateContent(targetNumber);
-
+    console.log('Generating stream...');
+    const geminiStream$ = await generateLlmContentStream(targetNumber);
+    console.log('Generated stream...');
     const readableStream = new ReadableStream({
         start(controller) {
-            const geminiStreamYaml$ = parseLlmResponse(geminiStream$);
-
             let subscription: Subscription | undefined = undefined;
-            subscription = geminiStreamYaml$.subscribe({
+            subscription = geminiStream$.subscribe({
                 next: (item) => {
                     if (Array.isArray(item)) {
                         item.forEach((i) => controller.enqueue(`data: ${JSON.stringify(i)}\n\n`));

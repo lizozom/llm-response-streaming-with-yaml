@@ -2,7 +2,7 @@ import { GenerateContentResponse } from '@google-cloud/vertexai';
 import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export function extractTextFromResponse(): OperatorFunction<GenerateContentResponse, string> {
+export function extractTextFromLlmResponse(): OperatorFunction<GenerateContentResponse, string> {
     return (source: Observable<GenerateContentResponse>) =>
         source.pipe(
             map(response => {
