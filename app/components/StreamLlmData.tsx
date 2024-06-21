@@ -22,8 +22,6 @@ const StreamLlmData: React.FC<StreamFromLLMProps> = ({ targetNumber }) => {
     };
 
     eventSource.onerror = (error) => {
-      setLoading(false);
-      setError('Failed to load data. Please try again.');
       console.error('EventSource failed:', error);
       eventSource.close();
     };

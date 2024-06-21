@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+![demo-recording](https://github.com/lizozom/llm-response-streaming-with-yaml/blob/main/img/streaming-llm-yaml-data.gif?raw=true)
 
 ## Getting Started
 
