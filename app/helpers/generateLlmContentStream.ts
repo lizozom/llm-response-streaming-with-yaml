@@ -24,7 +24,14 @@ function asyncGeneratorToObservable<T>(gen: AsyncGenerator<T>): Observable<T> {
 export async function generateLlmContentStream(count: number): Promise<Observable<Item>> {
     const vertexAI = new VertexAI({
         project: process.env.GOOGLE_PROJECT_ID!,
-        location: process.env.GOOGLE_PROJECT_REGION!
+        location: process.env.GOOGLE_PROJECT_REGION!,
+        googleAuthOptions: {
+            credentials: {
+                client_email: process.env.GOOGLE_CLIENT_EMAIL!,
+                private_key: process.env.GOOGLE_CLIENT_PRIVATE_KEY!,
+            }
+        }
+        
     });
 
     const model = vertexAI.getGenerativeModel({
