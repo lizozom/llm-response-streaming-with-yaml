@@ -12,7 +12,22 @@ export async function GET(request: NextRequest) {
     }
 
     console.log('Generating stream...');
-    const geminiStream$ = await generateLlmContentStream(targetNumber);
+
+    const contents = [{
+        role: 'user', parts: [{
+            text: `
+        Give me a list of ${targetNumber} things things you can do on the weekend.
+        For each thing provide
+         - a title
+         - a description of at least 20 words (surround with double quotes, don't put new line chartacter!)
+         - estimated duration
+         - estimated cost
+        Return the list in YAML format
+        `
+        }]
+    }];
+
+    const geminiStream$ = await generateLlmContentStream(contents);
     console.log('Generated stream...');
     const readableStream = new ReadableStream({
         start(controller) {

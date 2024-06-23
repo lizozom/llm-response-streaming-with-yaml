@@ -1,4 +1,4 @@
-import { VertexAI } from "@google-cloud/vertexai";
+import { Content, VertexAI } from "@google-cloud/vertexai";
 import { Observable, catchError } from "rxjs";
 import { extractTextFromLlmResponse } from "./extractTextFromLlmResponse";
 import { splitByNewline } from "./splitByNewLine";
@@ -21,7 +21,7 @@ function asyncGeneratorToObservable<T>(gen: AsyncGenerator<T>): Observable<T> {
     });
 }
 
-export async function generateLlmContentStream(count: number): Promise<Observable<Item>> {
+export async function generateLlmContentStream(contents: Content[]): Promise<Observable<Item>> {
     const vertexAI = new VertexAI({
         project: process.env.GOOGLE_PROJECT_ID!,
         location: process.env.GOOGLE_PROJECT_REGION!,
@@ -39,19 +39,7 @@ export async function generateLlmContentStream(count: number): Promise<Observabl
     });
 
     const request = {
-        contents: [{
-            role: 'user', parts: [{
-                text: `
-            Give me a list of ${count} things things you can do on the weekend.
-            For each thing provide
-             - a title
-             - a description of at least 20 words (surround with double quotes, don't put new line chartacter!)
-             - estimated duration
-             - estimated cost
-            Return the list in YAML format
-            `
-            }]
-        }],
+        contents,
     };
 
     const response = await model.generateContentStream(request);
